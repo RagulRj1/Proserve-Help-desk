@@ -1,0 +1,283 @@
+================================================================================
+  QUICK SETUP: Email & SMS Notifications for Technicians
+================================================================================
+
+🎯 What This Does:
+- Automatic emails when tickets are assigned to technicians
+- Optional SMS for urgent notifications
+- Keeps technicians informed in real-time
+
+================================================================================
+  📧 STEP 1: Setup Email Notifications (5 Minutes)
+================================================================================
+
+1. CREATE GMAIL APP PASSWORD:
+   
+   a) Go to: https://myaccount.google.com/security
+   b) Enable "2-Step Verification" (if not already enabled)
+   c) Go to: https://myaccount.google.com/apppasswords
+   d) Select "Mail" and "Windows Computer"
+   e) Click "Generate"
+   f) COPY the 16-character password (example: abcd efgh ijkl mnop)
+
+2. CREATE .env FILE:
+   
+   a) Open terminal
+   b) cd backend
+   c) copy .env.example .env
+
+3. EDIT .env FILE:
+   
+   Open backend/.env in notepad and add:
+   
+   ENABLE_EMAIL=true
+   SMTP_HOST=smtp.gmail.com
+   SMTP_PORT=587
+   SMTP_USER=your-email@gmail.com
+   SMTP_PASSWORD=abcdefghijklmnop
+   FROM_EMAIL=noreply@yourcompany.com
+   FROM_NAME=IT Help Desk System
+
+   ⚠️ IMPORTANT: Replace with YOUR Gmail and App Password!
+
+4. INSTALL DEPENDENCIES:
+   
+   cd backend
+   pip install python-dotenv
+
+5. RESTART BACKEND:
+   
+   Stop backend (Ctrl+C)
+   cd ..
+   START_BACKEND.bat
+
+✅ DONE! Emails will now be sent when tickets are assigned!
+
+================================================================================
+  📱 STEP 2: Setup SMS Notifications (Optional - 10 Minutes)
+================================================================================
+
+1. SIGN UP FOR TWILIO:
+   
+   a) Go to: https://www.twilio.com/try-twilio
+   b) Create free account (get $15 credit)
+   c) Verify your phone number
+   d) Get a Twilio phone number
+
+2. GET CREDENTIALS:
+   
+   From Twilio Console Dashboard:
+   - Account SID (example: ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxx)
+   - Auth Token (example: your_auth_token_here)
+   - Twilio Phone Number (example: +1234567890)
+
+3. UPDATE .env FILE:
+   
+   Open backend/.env and add:
+   
+   ENABLE_SMS=true
+   TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+   TWILIO_AUTH_TOKEN=your_auth_token_here
+   TWILIO_PHONE_NUMBER=+1234567890
+
+4. INSTALL TWILIO:
+   
+   cd backend
+   pip install twilio
+
+5. RESTART BACKEND:
+   
+   Stop backend (Ctrl+C)
+   cd ..
+   START_BACKEND.bat
+
+✅ DONE! SMS notifications will now be sent!
+
+================================================================================
+  🧪 STEP 3: Test Notifications
+================================================================================
+
+1. UPDATE TECHNICIAN EMAIL:
+   
+   a) Login as admin
+   b) Go to User Management
+   c) Edit technician user
+   d) Add valid email address
+   e) Optional: Add phone number for SMS (+1234567890 format)
+
+2. ASSIGN A TICKET:
+   
+   a) Go to All Tickets
+   b) Click Edit on any ticket
+   c) Assign to technician
+   d) Save
+
+3. CHECK RESULTS:
+   
+   ✅ Check technician's email inbox
+   ✅ Check backend terminal for: [Email] Sent to ...
+   ✅ If SMS enabled, check phone
+
+================================================================================
+  📋 Configuration Checklist
+================================================================================
+
+Email Setup:
+[ ] Gmail App Password created
+[ ] .env file created in backend/
+[ ] SMTP_USER = your Gmail
+[ ] SMTP_PASSWORD = 16-char app password
+[ ] python-dotenv installed
+[ ] Backend restarted
+[ ] Test email sent successfully
+
+SMS Setup (Optional):
+[ ] Twilio account created
+[ ] Account SID copied
+[ ] Auth Token copied
+[ ] Twilio phone number obtained
+[ ] .env updated with Twilio credentials
+[ ] twilio package installed
+[ ] Backend restarted
+[ ] Test SMS sent successfully
+
+================================================================================
+  🐛 Common Issues & Fixes
+================================================================================
+
+❌ "Email not received"
+   Fix: Check spam folder, verify email address
+
+❌ "SMTP authentication failed"
+   Fix: Make sure you're using App Password, not regular Gmail password
+
+❌ ".env file not found"
+   Fix: Create it: cd backend && copy .env.example .env
+
+❌ "No module named 'dotenv'"
+   Fix: pip install python-dotenv
+
+❌ "SMS not sending"
+   Fix: Check Twilio credits, verify phone format (+1234567890)
+
+================================================================================
+  📊 What Happens When?
+================================================================================
+
+SCENARIO 1: Admin Assigns Ticket
+   Admin clicks "Assign to Technician" 
+   → Email sent immediately
+   → SMS sent (if enabled)
+   → Subject: "New Ticket Assigned: #123 - Title"
+
+SCENARIO 2: User Creates Ticket (with auto-assignment)
+   User creates ticket with assigned technician
+   → Email sent immediately
+   → SMS sent (if enabled)
+   → Subject: "New Support Request: #124 - Title"
+
+SCENARIO 3: Notification Fails
+   If email/SMS fails:
+   → Ticket still saved ✅
+   → Error logged in terminal
+   → System continues working
+   → Check logs for debugging
+
+================================================================================
+  💡 Pro Tips
+================================================================================
+
+1. Start with Email Only
+   - Easier to setup
+   - No cost
+   - SMS is optional
+
+2. Use Gmail for Testing
+   - Free
+   - Easy App Password setup
+   - Reliable
+
+3. Monitor Terminal Output
+   - Watch for [Email] logs
+   - Check for errors
+   - Verify sending
+
+4. Update User Emails
+   - Keep technician emails current
+   - Test with your own email first
+   - Add phone numbers later for SMS
+
+5. Check Spam Folder
+   - First few emails might go to spam
+   - Mark as "Not Spam"
+   - Future emails will arrive in inbox
+
+================================================================================
+  📧 Example Email That Will Be Sent:
+================================================================================
+
+Subject: New Ticket Assigned: #123 - Printer Not Working
+
+Hi John Smith,
+
+A new ticket has been assigned to you.
+
+Ticket Details:
+• Ticket ID: #123
+• Title: Printer Not Working
+• Priority: HIGH
+• Assigned by: Administrator
+
+Please log in to the IT Help Desk system to view and manage this ticket.
+
+Best regards,
+IT Help Desk System
+
+================================================================================
+  📱 Example SMS That Will Be Sent:
+================================================================================
+
+IT Help Desk: New ticket #123 assigned to you. 
+Priority: HIGH. Title: Printer Not Working...
+
+================================================================================
+  🔒 Security Notes
+================================================================================
+
+✅ App Passwords are secure - they're isolated from your main Gmail
+✅ .env file is NOT committed to Git (in .gitignore)
+✅ Can revoke App Password anytime
+✅ Twilio credentials are encrypted
+✅ No sensitive ticket data in SMS
+
+⚠️ NEVER share your .env file or credentials!
+
+================================================================================
+  📖 More Information
+================================================================================
+
+Full Documentation: NOTIFICATION_SYSTEM.md
+
+Includes:
+- Detailed setup instructions
+- All configuration options
+- Advanced troubleshooting
+- Email templates
+- SMS templates
+- Security best practices
+- Future enhancements
+
+================================================================================
+  ✅ You're All Set!
+================================================================================
+
+After setup:
+1. ✅ Emails sent automatically when tickets assigned
+2. ✅ SMS sent automatically (if enabled)
+3. ✅ Technicians stay informed in real-time
+4. ✅ Faster response times
+5. ✅ Professional communication
+
+Questions? Check NOTIFICATION_SYSTEM.md or backend terminal logs!
+
+================================================================================
